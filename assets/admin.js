@@ -64,7 +64,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const table = document.querySelector('.wpss-table');
 
     if(table){
-        const [exportBtn, resetBtn] = table.parentElement.querySelectorAll('.wpss-btn');
+        const exportBtn = table.parentElement.querySelector('.wpss-export-btn');
+        const resetBtn = table.parentElement.querySelector('.wpss-reset-btn');
 
         // ---------------- Export CSV ----------------
         exportBtn.addEventListener('click', function(e){
@@ -76,14 +77,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 const cols = row.querySelectorAll('th, td');
                 const rowData = [];
                 cols.forEach(col => {
-                    // Escape quotes
                     let text = col.textContent.replace(/"/g, '""');
                     rowData.push(`"${text}"`);
                 });
                 csv.push(rowData.join(','));
             });
 
-            // Create a temporary link and click to download
             const csvFile = new Blob([csv.join("\n")], {type: "text/csv"});
             const downloadLink = document.createElement("a");
             downloadLink.download = "login_attempts.csv";
@@ -99,11 +98,12 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             if(confirm('Are you sure you want to reset the login attempts log?')){
                 const tbody = table.tBodies[0];
-                tbody.innerHTML = ''; // Remove all rows
+                tbody.innerHTML = ''; // Clear all rows
                 alert('Login attempts log has been reset!');
             }
         });
     }
 });
+
 
 });
